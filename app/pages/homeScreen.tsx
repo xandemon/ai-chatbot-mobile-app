@@ -9,7 +9,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import chatFaceData from '../services/chatFaceData';
+import chatFaceData from '../constants/chatFaceData';
 import {ChatbotType} from '../types';
 
 const HomeScreen = () => {
