@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
   },
   chatbotOptions: {
     height: 100,
-    width: Dimensions.get('screen').width * 0.8,
     padding: 12,
     marginTop: 20,
     justifyContent: 'space-around',
