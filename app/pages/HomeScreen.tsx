@@ -11,8 +11,25 @@ import {
 import React, {useEffect, useState} from 'react';
 import chatFaceData from '../constants/chatFaceData';
 import {ChatbotType} from '../types';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-const HomeScreen = () => {
+//ALTERNATIVE TO HomeScreenProps
+
+// type RootStackParamList = {
+//   Home: undefined;
+//   Chat: undefined;
+// };
+// type HomeScreenNavigationProp = NativeStackNavigationProp<
+//   RootStackParamList,
+//   'Home'
+// >;
+// type HomeScreenProps = {
+//   navigation: HomeScreenNavigationProp;
+// };
+
+interface HomeScreenProps extends NativeStackScreenProps<any> {}
+
+const HomeScreen = ({navigation}: HomeScreenProps) => {
   const [chatbotsList, setChatbotsList] = useState<Array<ChatbotType>>();
   const [selectedChatbot, setSelectedChatbot] = useState<
     ChatbotType | undefined
@@ -66,6 +83,7 @@ const HomeScreen = () => {
         </View>
 
         <TouchableOpacity
+          onPress={() => navigation.navigate('Chat')}
           style={[
             styles.chatButton,
             {backgroundColor: selectedChatbot?.primary},
