@@ -7,8 +7,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   chatMessagesContainer: {
-    height: '100%',
-    backgroundColor: '#eee',
+    // backgroundColor: '#000',
   },
   chatInputContainer: {
     position: 'relative',

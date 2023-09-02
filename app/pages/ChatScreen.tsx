@@ -5,26 +5,50 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from 'react-native';
-import React from 'react';
-import {ChatbotType} from '../types';
+import React, {useEffect, useState} from 'react';
 import {useRoute} from '@react-navigation/native';
 import styles from '../styles/chatScreen.styles';
+import {ChatbotType, MessageType} from '../types';
+import ChatRenderer from '../components/ChatRenderer.component';
 
 const ChatScreen = () => {
+  const initialDate = new Date();
   const route = useRoute();
-  const params = route.params;
+  const params: any = route.params;
+  const {chatBot}: {chatBot: ChatbotType} = params;
   const [inputPrompt, setInputPrompt] = React.useState('');
 
+  const [messages, setMessages] = useState<MessageType[]>([
+    {
+      id: Date.now(),
+      sender: 'ai',
+      createdAt: initialDate.toDateString(),
+      message: 'How are you?',
+    },
+  ]);
+
   const sendInputPrompt = () => {
-    console.log('>>>', inputPrompt);
+    const date = new Date();
     setInputPrompt('');
+    setMessages([
+      ...messages,
+      {
+        id: Date.now(),
+        sender: 'user',
+        createdAt: date.toDateString(),
+        message: inputPrompt,
+      },
+    ]);
   };
 
   return (
     <SafeAreaView>
       <View style={styles.chatScreenContainer}>
-        <View style={styles.chatMessagesContainer}></View>
+        <SafeAreaView style={[styles.chatMessagesContainer]}>
+          <ChatRenderer messages={messages} />
+        </SafeAreaView>
         <View style={styles.chatInputContainer}>
           <TextInput
             placeholder="Ask me anything..."
