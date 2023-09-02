@@ -37,8 +37,6 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
     ChatbotType | undefined
   >();
 
-  console.log(chatbotsList);
-
   useEffect(() => {
     setChatbotsList(chatFaceData);
     setSelectedChatbot(chatFaceData?.[0]);
