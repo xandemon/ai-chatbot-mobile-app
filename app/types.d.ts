@@ -5,3 +5,10 @@ export interface ChatbotType {
   primary: string;
   secondary: string;
 }
+
+export interface MessageType {
+  id: number;
+  sender: string;
+  createdAt: string;
+  message: string;
+}
