@@ -10,8 +10,9 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useRoute} from '@react-navigation/native';
 import styles from '../styles/chatScreen.styles';
-import {ChatbotType, MessageType} from '../types';
+import {ChatbotType, MessageType, PromptResponseData} from '../types';
 import ChatRenderer from '../components/ChatRenderer.component';
+import {getPromptResponse} from '../services/getPromptResponse';
 
 const ChatScreen = () => {
   const initialDate = new Date();
@@ -19,6 +20,7 @@ const ChatScreen = () => {
   const params: any = route.params;
   const {chatBot}: {chatBot: ChatbotType} = params;
   const [inputPrompt, setInputPrompt] = React.useState('');
+  const [loading, setLoading] = useState(false);
 
   const [messages, setMessages] = useState<MessageType[]>([
     {
@@ -29,19 +31,53 @@ const ChatScreen = () => {
     },
   ]);
 
-  const sendInputPrompt = () => {
-    const date = new Date();
+  const clearInputPrompt = () => {
     setInputPrompt('');
-    setMessages([
-      ...messages,
+  };
+
+  const renderPromptResponse = async (tempMessages: MessageType[]) => {
+    const date = new Date();
+    console.log('!!renderpromptResponse', messages);
+    // const tempMessages = messages;
+    setLoading(true);
+    const data: PromptResponseData = await getPromptResponse({
+      prompt: inputPrompt,
+    })
+      .then(response => response.data)
+      .catch(error => error);
+    setLoading(false);
+    console.log('response', data);
+    const updatedMessages = [
+      ...tempMessages,
       {
         id: Date.now(),
-        sender: 'user',
+        sender: 'ai',
         createdAt: date.toDateString(),
-        message: inputPrompt,
+        message: data.resp[1].content,
       },
-    ]);
+    ];
+    setMessages(updatedMessages);
   };
+
+  const sendInputPrompt = () => {
+    const date = new Date();
+    console.log('!!sendInputPrompt', messages);
+    const tempMessages = messages;
+    tempMessages.push({
+      id: Date.now(),
+      sender: 'user',
+      createdAt: date.toDateString(),
+      message: inputPrompt,
+    });
+    setMessages(tempMessages);
+
+    renderPromptResponse(tempMessages);
+    clearInputPrompt();
+  };
+
+  useEffect(() => {
+    console.log('messages', messages);
+  }, [messages]);
 
   return (
     <SafeAreaView>
