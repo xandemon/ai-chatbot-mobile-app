@@ -12,3 +12,7 @@ export interface MessageType {
   createdAt: string;
   message: string;
 }
+
+export interface PromptResponseData {
+  resp: [{content: string}, {content: string}];
+}
